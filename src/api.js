@@ -3,9 +3,12 @@ const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8085/api/
 
 export async function checkBackendHealth() {
   try {
+    const res = await fetch(`${API_BASE_URL}/messages/health`);
+    if (res.ok) return true;
+    // Fallback
     const dummyUser = '00000000-0000-0000-0000-000000000000';
-    const res = await fetch(`${API_BASE_URL}/messages/conversation?user1=${dummyUser}&user2=${dummyUser}`);
-    return res.ok || res.status === 200;
+    const fallbackRes = await fetch(`${API_BASE_URL}/messages/conversation?user1=${dummyUser}&user2=${dummyUser}`);
+    return fallbackRes.ok || fallbackRes.status === 200;
   } catch (err) {
     return false;
   }
